@@ -122,6 +122,31 @@ class Solution {
 
 
 
+//            滑动窗口
+public int lengthOfLongestSubstring2(String s) {
+        int length = s.length();
+        if (length<2){
+            return length;
+        }
+        int[] frq = new int[128];
+        char[] charArray = s.toCharArray();
+        int left =0;
+        int right =0;
+        int res =1;
+        while (right<length){
+            frq[charArray[right]]++;
+
+            while (frq[charArray[right]]==2){
+                frq[charArray[left]]--;
+                left++;
+            }
+            res = Math.max(res,right-left+1);
+            right++;
+        }
+        return res;
+
+}
+
 
 
 

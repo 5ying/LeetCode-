@@ -46,9 +46,12 @@
 // 👍 2088 👎 0
 
 package leetcode.editor.cn;
+
+import java.util.PriorityQueue;
+
 //Java：合并K个升序链表
  //  2022-08-02 18:26:19	获取当前时间
-public class P23MergeKSortedLists{
+class P23MergeKSortedLists{
     public static void main(String[] args) {
         Solution solution = new P23MergeKSortedLists().new Solution();
         // TO TEST
@@ -66,8 +69,42 @@ public class P23MergeKSortedLists{
  * }
  */
 class Solution {
+
+    class Status implements Comparable<Status> {
+        int val;
+        ListNode ptr;
+
+        private Status(int val,ListNode ptr){
+            this.val = val;
+            this.ptr = ptr;
+        }
+
+        @Override
+        public int compareTo(Status status2) {
+            return this.val-status2.val;
+        }
+    }
+
+    PriorityQueue<Status> queue = new PriorityQueue<>();
     public ListNode mergeKLists(ListNode[] lists) {
-        return new ListNode();
+        ListNode hair = new ListNode(0);
+        for (ListNode node :lists){
+            if (node!=null){
+                queue.offer(new Status(node.val,node));
+            }
+        }
+        ListNode tail = hair;
+
+        while (!queue.isEmpty()){
+            Status f = queue.poll();
+            tail.next = f.ptr;
+            tail = tail.next;
+
+            if (f.ptr.next!=null){
+                queue.offer(new Status(f.ptr.next.val,f.ptr.next));
+            }
+        }
+        return hair.next;
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
